@@ -38,14 +38,16 @@ jobs:
       - name: Compress results directory
         run: |
           cd OneForAll
-          tar -czvf result.tar.gz result
+          tar -czvf result.tar.gz results
+          ls -alh
           cd ..
+          ls -alh
 
       - name: Upload compressed results
         uses: actions/upload-artifact@v4
         with:
           name: oneforall-results
-          path: OneForAll/result.tar.gz
+          path: OneForAll/results.tar.gz
           if-no-files-found: error
           retention-days: 7
           compression-level: 6

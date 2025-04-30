@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.8"]
 
     steps:
     - uses: actions/checkout@v4
@@ -35,13 +35,11 @@ jobs:
     - name: Run test_2file
       run: |
         mkdir -p result  
-        python -c "open('result/output.txt', 'w').write('Data generated at $(date)')"  
-    - name: Commite2Back
-      run: |
-          git config --global user.name "1uglyman1"  
-          git config --global user.email "2173869002@qq.com"  
-          git add result/  
-          git commit -m "Update result [auto]"  
-          git push 
-      env:  
-          GITHUB_TOKEN: ${{ secrets._1UGLYMAN1 }}  # 直接引用即可  
+        python -c "open('hello2.txt', 'a').write('Data generated at $(date)')"  
+    - name: upload-artifact # 步骤 3 的步骤名称
+        # 使用 uses 关键字引用 actions/upload-artifact@v2 动作
+        # 这个动作会将 hello2.txt 上传到 GitHub Actions 的 Artifacts
+      uses: actions/upload-artifact@v2
+      with: # 输入参数列表
+        name: hello2
+        path: hello2.txt

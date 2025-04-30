@@ -33,8 +33,19 @@ jobs:
         run: |
           python OneForAll/oneforall.py --target example.com run
         env:
-          # 可根据需要添加其他环境变量
           TARGET_DOMAIN: example.com
+
+      - name: Check OneForAll results
+        run: |
+          ls -l OneForAll/result/
+
+      - name: Check OneForAll directory
+        run: |
+          ls -R OneForAll/
+
+      - name: Check and set permissions
+        run: |
+          chmod -R 755 OneForAll/
 
       - name: Upload results
         uses: actions/upload-artifact@v4
@@ -43,4 +54,6 @@ jobs:
           path: OneForAll/result/*
           if-no-files-found: error
           retention-days: 7
-    
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false

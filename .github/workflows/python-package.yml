@@ -31,29 +31,24 @@ jobs:
 
       - name: Run OneForAll
         run: |
-          python OneForAll/oneforall.py --target example.com run
+          python OneForAll/oneforall.py --target qcc.com run
         env:
-          TARGET_DOMAIN: example.com
+          TARGET_DOMAIN: qcc.com
 
-      - name: Check OneForAll results
+      - name: Compress results directory
         run: |
-          ls -l OneForAll/result/
+          cd OneForAll
+          tar -czvf result.tar.gz result
+          cd ..
 
-      - name: Check OneForAll directory
-        run: |
-          ls -R OneForAll/
-
-      - name: Check and set permissions
-        run: |
-          chmod -R 755 OneForAll/
-
-      - name: Upload results
+      - name: Upload compressed results
         uses: actions/upload-artifact@v4
         with:
           name: oneforall-results
-          path: OneForAll/result/*
+          path: OneForAll/result.tar.gz
           if-no-files-found: error
           retention-days: 7
           compression-level: 6
           overwrite: false
           include-hidden-files: false
+    

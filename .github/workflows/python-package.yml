@@ -30,7 +30,7 @@ jobs: # 定义工作流
       - name: upload-artifact # 步骤 3 的步骤名称
         # 使用 uses 关键字引用 actions/upload-artifact@v2 动作
         # 这个动作会将 hello2.txt 上传到 GitHub Actions 的 Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/action_test_demo01@v2
         with: # 输入参数列表
           name: hello2
           path: hello2.txt

@@ -1,36 +1,43 @@
-name: Example Workflow # 工作流名称
+name: Python package  
 
-on: # 定义触发条件
-  push: # 当push到main分支时触发
-    branches:
-      - main
-  workflow_dispatch: # 或 手动触发
-    inputs: # 定义输入参数列表
-      name-of-var: # 第一个待输入参数
-        description: 'Description of this var'
-        required: true
-        default: 'default string'
-      name-of-var-2: # 第二个待输入参数
-        description: 'Description of this var2'
-        required: false # 可选参数, 可以不输入
+on:  
+  push:  
+    branches: [ "main" ]  
+  pull_request:  
+    branches: [ "main" ]  
 
-jobs: # 定义工作流
-  echo-hello: # 工作流名称
-    runs-on: ubuntu-latest # 运行环境
-    steps: # 步骤
-      - name: Echo hello # 步骤 1 的步骤名称
-        # 使用 run 关键字执行 shell 命令
-        run: echo "Hello, ${{ github.event.inputs.name-of-var }}"
-      - name: Echo hello 2 # 步骤 2 的步骤名称
-        # run 关键字后加 | 表示多行命令
-        run: |
-          HELLO2="Hello, ${{ github.event.inputs.name-of-var-2 }}"
-          echo $HELLO2
-          echo $HELLO2 > hello2.txt
-      - name: upload-artifact # 步骤 3 的步骤名称
-        # 使用 uses 关键字引用 actions/upload-artifact@v2 动作
-        # 这个动作会将 hello2.txt 上传到 GitHub Actions 的 Artifacts
-        uses: actions/action_test_demo01@v2
-        with: # 输入参数列表
-          name: hello2
-          path: hello2.txt
+jobs:  
+  build:  
+    runs-on: ubuntu-latest  
+    strategy:  
+      fail-fast: false  
+      matrix:  
+        python-version: ["3.8"]  
+
+    steps:  
+    - uses: actions/checkout@v4  
+      with:  
+        fetch-depth: 0  
+    - name: Set up Python ${{ matrix.python-version }}  
+      uses: actions/setup-python@v3  
+      with:  
+        python-version: '3.8'  
+    - name: Install dependencies  
+      run: |  
+        python -m pip install --upgrade pip  
+    - name: Run test  
+      run: |  
+        python test.py  
+    - name: Run test_2file  
+      run: |  
+        mkdir -p result  
+        python -c "open('hello2.txt', 'a').write('Data generated at $(date)')"  
+    - name: Upload a Build Artifact  
+      uses: actions/upload-artifact@v4  
+      with:  
+        name: test-artifact  
+        path: |  
+          hello2.txt  
+          result/  
+        if-no-files-found: warn  
+        retention-days: 5  

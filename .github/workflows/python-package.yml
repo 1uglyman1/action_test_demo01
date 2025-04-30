@@ -47,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: oneforall-results
-          path: OneForAll/results.tar.gz
+          path: OneForAll/result.tar.gz
           if-no-files-found: error
           retention-days: 7
           compression-level: 6

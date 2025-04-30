@@ -1,2 +1,6 @@
 import os
-print("66666")
+try:
+  os.system("git clone https://github.com/shmilylty/OneForAll.git")
+except:
+  pass
+os.system("dir")

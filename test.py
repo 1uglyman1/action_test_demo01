@@ -1,20 +1,28 @@
+import subprocess
 import os
 
+try:
+    # 克隆 GitHub 仓库
+    result = subprocess.run(["git", "clone", "https://github.com/shmilylty/OneForAll.git"], capture_output=True, text=True, check=True)
+    print("仓库克隆成功")
+except subprocess.CalledProcessError as e:
+    print(f"克隆仓库时出错: {e.stderr}")
 
-def traverse_directory(directory):
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            file_path = os.path.join(root, file)
-            print(file_path)
+# 根据操作系统选择合适的命令查看目录内容
+if os.name == "nt":  # Windows 系统
+    command = "dir"
+else:  # Linux 或 macOS 系统
+    command = "ls"
 
-
-if __name__ == "__main__":
-    try:
-    os.system("git clone https://github.com/shmilylty/OneForAll.git")
-  except:
-    pass
-  os.system("dir")
-  os.system("dir")
-  current_directory = os.getcwd()
-  traverse_directory(current_directory)
-  
+try:
+    # 第一次查看目录内容
+    result = subprocess.run(command, shell=True, capture_output=True, text=True, check=True)
+    print("第一次查看目录内容:")
+    print(result.stdout)
+    # 第二次查看目录内容
+    result = subprocess.run(command, shell=True, capture_output=True, text=True, check=True)
+    print("第二次查看目录内容:")
+    print(result.stdout)
+except subprocess.CalledProcessError as e:
+    print(f"执行查看目录命令时出错: {e.stderr}")
+    

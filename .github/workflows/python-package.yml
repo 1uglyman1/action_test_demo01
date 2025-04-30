@@ -44,4 +44,4 @@ jobs:
           git commit -m "Update result [auto]"  
           git push 
       env:  
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 直接引用即可  
+          GITHUB_TOKEN: ${{ secrets._1UGLYMAN1 }}  # 直接引用即可  

@@ -1,4 +1,4 @@
-name: OneForAll Scan and Upload Results
+name: action_test_demo01 Scan and Upload Results
 
 on:
   push:
@@ -20,83 +20,26 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: install nmap
+      - name: install tools
         run: |
-          if [ -f /etc/debian_version ]; then
-              # Debian 或 Ubuntu 系统
-              echo "检测到 Debian 或 Ubuntu 系统，开始安装 nmap..."
-              sudo apt-get update
-              sudo apt-get install -y nmap
-              if [ $? -eq 0 ]; then
-                  echo "nmap 安装成功！"
-              else
-                  echo "nmap 安装失败，请检查网络或权限。"
-                  exit 1
-              fi
-          elif [ -f /etc/redhat-release ]; then
-              # CentOS 或 RHEL 系统
-              echo "检测到 CentOS 或 RHEL 系统，开始安装 nmap..."
-              sudo yum update -y
-              sudo yum install -y nmap
-              if [ $? -eq 0 ]; then
-                  echo "nmap 安装成功！"
-              else
-                  echo "nmap 安装失败，请检查网络或权限。"
-                  exit 1
-              fi
-          elif [ -f /etc/arch-release ]; then
-              # Arch Linux 系统
-              echo "检测到 Arch Linux 系统，开始安装 nmap..."
-              sudo pacman -Syu --noconfirm
-              sudo pacman -S --noconfirm nmap
-              if [ $? -eq 0 ]; then
-                  echo "nmap 安装成功！"
-              else
-                  echo "nmap 安装失败，请检查网络或权限。"
-                  exit 1
-              fi
-          else
-              echo "未识别的 Linux 发行版，无法自动安装 nmap。请手动安装。"
-              exit 1
-          fi
-          
-          # 验证 nmap 是否安装成功
-          nmap --version
-          if [ $? -eq 0 ]; then
-              echo "nmap 已成功安装并可正常使用。"
-          else
-              echo "nmap 安装可能存在问题，请检查。"
-          fi
-              
-      - name: Clone OneForAll
-        run: |
-          nmap -h
-          git clone https://github.com/shmilylty/OneForAll.git
+          git clone https://github.com/0xKayala/NucleiFuzzer.git && cd NucleiFuzzer && sudo chmod +x install.sh && ./install.sh && (command -v nf &> /dev/null && nf -h || echo "Installation failed: Command 'nf' not found. Please check for errors during installation.") && cd .. || echo "Failed to clone or navigate to NucleiFuzzer repository. Please check your setup."
+          nf -d www.baidu.com
 
-      - name: Install dependencies
+      - name: Compress action_test_demo01 directory
         run: |
-          python -m pip install --upgrade pip
-          pip install -r OneForAll/requirements.txt
-
-      - name: Run OneForAll
-        run: |
-          python OneForAll/oneforall.py --target qcc.com run
-        env:
-          TARGET_DOMAIN: qcc.com
-
-      - name: Compress results directory
-        run: |
-          cd OneForAll
-          tar -czvf result.tar.gz results
           ls -alh
           cd ..
+          tar -czvf action_test_demo01.tar.gz action_test_demo01
+          ls -alh
+          mv action_test_demo01.tar.gz action_test_demo01
+          cd action_test_demo01
           ls -alh
 
       - name: Upload compressed results
         uses: actions/upload-artifact@v4
         with:
-          name: oneforall-results
-          path: OneForAll/result.tar.gz
+          name: action_test_demo01-results
+          path: action_test_demo01.tar.gz
           if-no-files-found: error
           retention-days: 7
           compression-level: 6

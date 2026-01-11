@@ -25,7 +25,7 @@ jobs:
           pip install requests
           git clone https://github.com/0xKayala/NucleiFuzzer.git && cd NucleiFuzzer && sudo chmod +x install.sh && ./install.sh && (command -v nf &> /dev/null && nf -h || echo "Installation failed: Command 'nf' not found. Please check for errors during installation.") && cd .. || echo "Failed to clone or navigate to NucleiFuzzer repository. Please check your setup."
           ls -al
-          nf -f url.txt
+          timeout --kill-after=10 19800 bash -c 'nf -f url.txt'; [ $? -eq 124 ] && echo "run timeout 5:30 so stop and kill ：nf -f url.txt"
 
       - name: Compress action_test_demo01 directory
         run: |
